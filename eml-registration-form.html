@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EML Collection Project — Registration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Mono:wght@500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EFEDE5;
+    --paper-raised:#FFFFFF;
+    --ink:#1B1F1D;
+    --muted:#736E60;
+    --line:#D8D3C2;
+    --accent:#B3781E;     /* stamp gold */
+    --accent-ink:#7A5110;
+    --deep:#1F3B33;       /* deep teal-green, structural */
+    --deep-soft:#E6EAE6;
+    --error:#AC3B2C;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(1200px 600px at 15% -10%, #F5F3EA 0%, transparent 60%),
+      var(--paper);
+    color:var(--ink);
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    line-height:1.5;
+    padding:48px 16px 90px;
+  }
+  .wrap{max-width:660px;margin:0 auto;}
+
+  /* ---- Envelope header block ---- */
+  .envelope{
+    border:1px solid var(--deep);
+    border-radius:3px;
+    background:var(--paper-raised);
+    margin-bottom:26px;
+    position:relative;
+    overflow:hidden;
+  }
+  .envelope::before{
+    content:"";
+    position:absolute;
+    top:0; left:0; right:0;
+    height:5px;
+    background:repeating-linear-gradient(
+      -45deg,
+      var(--accent) 0 8px,
+      var(--deep) 8px 16px
+    );
+  }
+  .env-inner{padding:26px 26px 22px;}
+  .env-row{
+    display:flex;
+    gap:10px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    color:var(--muted);
+    padding:6px 0;
+    border-bottom:1px dashed var(--line);
+  }
+  .env-row:last-of-type{border-bottom:none;}
+  .env-row .k{
+    width:78px;
+    flex:none;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--deep);
+    font-weight:600;
+  }
+  .env-row .v{color:var(--ink);}
+  .env-subject{
+    font-family:'Fraunces',Georgia,serif;
+    font-size:27px;
+    font-weight:600;
+    letter-spacing:-.01em;
+    margin:16px 0 4px;
+    color:var(--ink);
+  }
+  .env-desc{
+    font-size:14px;
+    color:var(--muted);
+    margin:0;
+    max-width:52ch;
+  }
+  .stamp{
+    position:absolute;
+    top:18px; right:20px;
+    width:70px; height:70px;
+    border:2px solid var(--accent);
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    transform:rotate(8deg);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:9.5px;
+    font-weight:600;
+    color:var(--accent-ink);
+    letter-spacing:.03em;
+    line-height:1.25;
+    opacity:.9;
+  }
+
+  /* ---- Sections ---- */
+  .card{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:26px 24px;
+    margin-bottom:14px;
+  }
+  .card h2{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.1em;
+    color:var(--deep);
+    margin:0 0 20px;
+    padding-bottom:12px;
+    border-bottom:1px solid var(--line);
+    font-weight:600;
+  }
+  .card h2 .code{
+    color:var(--accent-ink);
+    background:var(--deep-soft);
+    padding:2px 7px;
+    border-radius:3px;
+    font-size:11px;
+  }
+
+  .field{margin-bottom:20px;}
+  .field:last-child{margin-bottom:0;}
+  label.q{
+    display:block;
+    font-size:14.5px;
+    font-weight:600;
+    margin-bottom:9px;
+    color:var(--ink);
+  }
+  label.q .req{color:var(--error);margin-left:2px;}
+
+  input[type="text"], input[type="tel"], input[type="email"]{
+    width:100%;
+    padding:11px 13px;
+    border:1px solid var(--line);
+    border-radius:5px;
+    font-size:14.5px;
+    background:#FBFAF6;
+    font-family:inherit;
+    color:var(--ink);
+  }
+  input:focus{
+    outline:2px solid var(--accent);
+    outline-offset:1px;
+    border-color:var(--accent);
+    background:#fff;
+  }
+
+  .choice-group{display:flex;flex-direction:column;gap:8px;}
+  .choice{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    padding:11px 13px;
+    border:1px solid var(--line);
+    border-radius:5px;
+    cursor:pointer;
+    font-size:14.5px;
+    background:#FBFAF6;
+    transition:border-color .15s, background .15s;
+  }
+  .choice:hover{border-color:var(--accent);}
+  .choice input{accent-color:var(--accent);width:16px;height:16px;flex:none;}
+  .choice.selected{border-color:var(--deep);background:var(--deep-soft);}
+
+  .vendor-toggle{display:flex;gap:10px;}
+  .vendor-toggle .choice{flex:1;justify-content:center;font-weight:600;}
+
+  .hint{font-size:12.5px;color:var(--muted);margin-top:7px;}
+
+  .confirm-box{
+    display:flex;
+    gap:11px;
+    align-items:flex-start;
+    padding:15px 16px;
+    background:var(--deep-soft);
+    border-radius:5px;
+    border:1px solid var(--line);
+  }
+  .confirm-box input{margin-top:3px;accent-color:var(--deep);width:16px;height:16px;flex:none;}
+  .confirm-box span{font-size:13.5px;color:var(--ink);}
+
+  .hidden{display:none !important;}
+
+  .submit-btn{
+    width:100%;
+    padding:15px;
+    background:var(--deep);
+    color:#fff;
+    border:none;
+    border-radius:6px;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    letter-spacing:.02em;
+    font-family:'IBM Plex Mono',monospace;
+    text-transform:uppercase;
+    transition:background .15s;
+  }
+  .submit-btn:hover{background:#152c26;}
+  .submit-btn:disabled{opacity:.6;cursor:not-allowed;}
+
+  .error-msg{
+    color:var(--error);
+    font-size:13px;
+    margin-top:10px;
+    display:none;
+  }
+
+  .success{
+    display:none;
+    text-align:center;
+    padding:50px 24px;
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:6px;
+  }
+  .success .tick{
+    width:54px;height:54px;border-radius:50%;
+    background:var(--deep);color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    margin:0 auto 18px;font-size:26px;
+  }
+  .success h2{font-family:'Fraunces',Georgia,serif;font-size:20px;margin:0 0 8px;border:none;padding:0;color:var(--ink);font-weight:600;}
+  .success p{color:var(--muted);font-size:14px;margin:0;}
+
+  .contact-note{
+    text-align:center;
+    font-size:12.5px;
+    font-family:'IBM Plex Mono',monospace;
+    color:var(--muted);
+    margin-top:26px;
+    letter-spacing:.02em;
+  }
+  .contact-note strong{color:var(--ink);}
+
+  @media (max-width:480px){
+    .stamp{display:none;}
+    .env-inner{padding:22px 18px 18px;}
+    .env-subject{font-size:22px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="envelope">
+    <div class="stamp">GENUINE<br>EML<br>ONLY</div>
+    <div class="env-inner">
+      <div class="env-row"><span class="k">From</span><span class="v">Verified business inboxes — Hindi · Malay · Indonesian</span></div>
+      <div class="env-row"><span class="k">Project</span><span class="v">Multilingual Email Data Collection</span></div>
+      <div class="env-row"><span class="k">Status</span><span class="v">Onboarding freelancers &amp; vendors</span></div>
+      <div class="env-subject">Registration Form</div>
+      <p class="env-desc">Submit this to be considered for the EML collection project. Fields marked <span style="color:var(--error)">*</span> are required.</p>
+    </div>
+  </div>
+
+  <form id="regForm">
+
+    <div class="card">
+      <h2><span class="code">01</span> Applying As</h2>
+      <div class="field">
+        <label class="q">Are you applying as a Vendor or Individual? <span class="req">*</span></label>
+        <div class="vendor-toggle">
+          <label class="choice" data-role="individual">
+            <input type="radio" name="applicantType" value="Individual" required>
+            Individual
+          </label>
+          <label class="choice" data-role="vendor">
+            <input type="radio" name="applicantType" value="Vendor" required>
+            Vendor / Agency
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="code">02</span> Basic Information</h2>
+      <div class="field">
+        <label class="q">Full Name <span class="req">*</span></label>
+        <input type="text" name="fullName" required>
+      </div>
+      <div class="field">
+        <label class="q">Contact Number (WhatsApp/Telegram) <span class="req">*</span></label>
+        <input type="tel" name="contactNumber" required>
+      </div>
+      <div class="field">
+        <label class="q">Native Language <span class="req">*</span></label>
+        <div class="choice-group">
+          <label class="choice"><input type="radio" name="nativeLang" value="Hindi" required> Hindi</label>
+          <label class="choice"><input type="radio" name="nativeLang" value="Malay" required> Malay</label>
+          <label class="choice"><input type="radio" name="nativeLang" value="Indonesian" required> Indonesian</label>
+        </div>
+      </div>
+      <div class="field">
+        <label class="q">Business Email Address <span class="req">*</span></label>
+        <input type="email" name="businessEmail" required placeholder="you@company.com">
+        <div class="hint">Must be a work/business domain — personal Gmail/Yahoo not accepted.</div>
+      </div>
+      <div class="field">
+        <label class="q">Are you able to export emails in .eml format? <span class="req">*</span></label>
+        <div class="choice-group">
+          <label class="choice"><input type="radio" name="emlCapability" value="Yes" required> Yes</label>
+          <label class="choice"><input type="radio" name="emlCapability" value="No" required> No</label>
+          <label class="choice"><input type="radio" name="emlCapability" value="Need guidance" required> Need guidance</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="card hidden" id="vendorSection">
+      <h2><span class="code">03</span> Vendor Details</h2>
+      <div class="field">
+        <label class="q">Company / Agency Name <span class="req">*</span></label>
+        <input type="text" name="companyName">
+      </div>
+      <div class="field">
+        <label class="q">Number of Team Members <span class="req">*</span></label>
+        <div class="choice-group">
+          <label class="choice"><input type="radio" name="teamSize" value="1-5"> 1–5</label>
+          <label class="choice"><input type="radio" name="teamSize" value="6-15"> 6–15</label>
+          <label class="choice"><input type="radio" name="teamSize" value="16-30"> 16–30</label>
+          <label class="choice"><input type="radio" name="teamSize" value="30+"> 30+</label>
+        </div>
+      </div>
+      <div class="field">
+        <label class="q">Which countries are your team members based in? <span class="req">*</span></label>
+        <input type="text" name="teamCountries" placeholder="e.g., India, Malaysia, Indonesia">
+      </div>
+      <div class="field">
+        <label class="q">Which languages can your team cover?</label>
+        <div class="choice-group">
+          <label class="choice"><input type="checkbox" name="teamLanguages" value="Hindi"> Hindi</label>
+          <label class="choice"><input type="checkbox" name="teamLanguages" value="Malay"> Malay</label>
+          <label class="choice"><input type="checkbox" name="teamLanguages" value="Indonesian"> Indonesian</label>
+        </div>
+      </div>
+      <div class="field">
+        <label class="q">Have you managed similar data collection projects before?</label>
+        <input type="text" name="priorExperience" placeholder="Yes/No — brief details if yes">
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="code">04</span> Confirmation &amp; Payment</h2>
+      <div class="field">
+        <div class="confirm-box">
+          <input type="checkbox" name="confirmation" required id="confirmCheck">
+          <span>I confirm all submitted emails will be genuine, unedited, business-domain, and dated after 1 March 2023 <span class="req">*</span></span>
+        </div>
+      </div>
+      <div class="field">
+        <label class="q">Preferred Payment Method <span class="req">*</span></label>
+        <div class="choice-group">
+          <label class="choice"><input type="radio" name="paymentMethod" value="bKash" required> bKash</label>
+          <label class="choice"><input type="radio" name="paymentMethod" value="Payoneer" required> Payoneer</label>
+          <label class="choice"><input type="radio" name="paymentMethod" value="Bank Transfer" required> Bank Transfer</label>
+          <label class="choice"><input type="radio" name="paymentMethod" value="Crypto" required> Crypto</label>
+          <label class="choice"><input type="radio" name="paymentMethod" value="PayPal" required> PayPal</label>
+          <label class="choice"><input type="radio" name="paymentMethod" value="Other" required> Other</label>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="submit-btn">Submit Registration</button>
+    <div class="error-msg" id="errorMsg">Please fill in all required fields before submitting.</div>
+  </form>
+
+  <div class="success" id="successBox">
+    <div class="tick">✓</div>
+    <h2>Registration received</h2>
+    <p>Thanks for applying — we'll review your details and follow up shortly.</p>
+  </div>
+
+  <p class="contact-note">Questions? Contact <strong>Siyam</strong>, Operational Manager — +8801600866444</p>
+
+</div>
+
+<script>
+  const form = document.getElementById('regForm');
+  const vendorSection = document.getElementById('vendorSection');
+  const vendorInputs = vendorSection.querySelectorAll('input');
+
+  document.querySelectorAll('.choice').forEach(choice => {
+    const input = choice.querySelector('input');
+    input.addEventListener('change', () => {
+      const name = input.name;
+      document.querySelectorAll(`input[name="${name}"]`).forEach(i => {
+        i.closest('.choice').classList.toggle('selected', i.checked);
+      });
+    });
+  });
+
+  document.querySelectorAll('input[name="applicantType"]').forEach(input => {
+    input.addEventListener('change', () => {
+      const isVendor = input.value === 'Vendor';
+      vendorSection.classList.toggle('hidden', !isVendor);
+      vendorInputs.forEach(el => {
+        if (el.name === 'companyName' || el.name === 'teamCountries' || el.name === 'teamSize') {
+          el.required = isVendor;
+        }
+      });
+    });
+  });
+
+  // Paste your Google Apps Script Web App URL here (from Deploy > New deployment)
+  const SCRIPT_URL = "YOUR_SCRIPT_URL_HERE";
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!form.checkValidity()) {
+      document.getElementById('errorMsg').style.display = 'block';
+      form.reportValidity();
+      return;
+    }
+    document.getElementById('errorMsg').style.display = 'none';
+
+    const submitBtn = form.querySelector('.submit-btn');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting...';
+
+    const raw = new FormData(form);
+    const payload = {
+      applicantType: raw.get('applicantType'),
+      fullName: raw.get('fullName'),
+      contactNumber: raw.get('contactNumber'),
+      nativeLang: raw.get('nativeLang'),
+      businessEmail: raw.get('businessEmail'),
+      emlCapability: raw.get('emlCapability'),
+      companyName: raw.get('companyName'),
+      teamSize: raw.get('teamSize'),
+      teamCountries: raw.get('teamCountries'),
+      teamLanguages: raw.getAll('teamLanguages').join(', '),
+      priorExperience: raw.get('priorExperience'),
+      confirmation: raw.get('confirmation') === 'on',
+      paymentMethod: raw.get('paymentMethod')
+    };
+
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    })
+      .then(() => {
+        form.style.display = 'none';
+        document.getElementById('successBox').style.display = 'block';
+      })
+      .catch(() => {
+        document.getElementById('errorMsg').textContent = 'Something went wrong submitting the form. Please try again.';
+        document.getElementById('errorMsg').style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Registration';
+      });
+  });
+</script>
+
+</body>
+</html>
