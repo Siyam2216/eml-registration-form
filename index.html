@@ -370,12 +370,8 @@
       <div class="field">
         <label class="q">Preferred Payment Method <span class="req">*</span></label>
         <div class="choice-group">
-          <label class="choice"><input type="radio" name="paymentMethod" value="bKash" required> bKash</label>
-          <label class="choice"><input type="radio" name="paymentMethod" value="Payoneer" required> Payoneer</label>
-          <label class="choice"><input type="radio" name="paymentMethod" value="Bank Transfer" required> Bank Transfer</label>
           <label class="choice"><input type="radio" name="paymentMethod" value="Crypto" required> Crypto</label>
           <label class="choice"><input type="radio" name="paymentMethod" value="PayPal" required> PayPal</label>
-          <label class="choice"><input type="radio" name="paymentMethod" value="Other" required> Other</label>
         </div>
       </div>
     </div>
@@ -422,7 +418,7 @@
   });
 
   // Paste your Google Apps Script Web App URL here (from Deploy > New deployment)
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz27TJB6CFJbYEnVknTNoE-QlW65frZH58fJk8mGrFvEo-bWFs24yQmyQOR1Ls_lROC/exec";
+  const SCRIPT_URL = "YOUR_SCRIPT_URL_HERE";
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
